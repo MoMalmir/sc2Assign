@@ -1,0 +1,14 @@
+Package: sc2Assign
+Type: Package
+Title: A Package for Automatically Cell Type Assignment in Single Cell Level
+Version: 0.1.0
+Authors@R: 
+    c(person("Mostafa", "Malmir", email = "mostafa.malmir@utsa.edu", role = c("aut", "cre")),
+    person("Yidong", "Chen", email = "cheny8@uthscsa.edu", role = "aut"),
+    person("Yufang", "Jin", email = "yufang.jin@uthscsa.edu", role = "aut"))
+Description: Implements sc2Assign for cell type assignment in single-cell RNA-seq data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: stats, Seurat, Matrix
+RoxygenNote: 7.3.2
