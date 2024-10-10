@@ -22,9 +22,11 @@ You need to provide the algorithm with count matrix, nomalized matrix and the ge
 The ouput files are sc2Assign and WAffinity prediicted cell type for each single cell
 
 # Usage
+```
 pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, percentile = 0.25, reduction = 'umap')
+```
 
-###in which
+*in which*
 
 - **count.matrix:** A matrix containing raw gene expression counts. The rows represent genes, and the columns represent individual cells.
 
