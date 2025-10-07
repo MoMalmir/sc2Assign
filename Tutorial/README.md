@@ -2,7 +2,7 @@
 We have prepared a step-by-step tutorial to guide you through the process, from installing **sc2Assign** to assigning cell types using this tool [here](https://figshare.com/account/articles/27208077?file=58550638).
 
 # Datasets and Gene Marker sets
-- The marker gene set for **hPancreas** dataset from [Baron et al. (2016)](https://www.sciencedirect.com/science/article/pii/S2405471216302666?via%3Dihub) paper is stored [here](https://doi.org/10.6084/m9.figshare.27207732).
+- The marker gene set for **hPancreas** dataset from [Baron et al. (2016)](https://www.sciencedirect.com/science/article/pii/S2405471216302666?via%3Dihub) paper is stored [here](https://figshare.com/articles/dataset/Human_Pancreas_Gene_Markers/27207732?file=58550683).
 
 - The marker gene set for **mLung** from [Tabula Muris (2018)](https://www.nature.com/articles/s41586-018-0590-4) paper is stored [here](https://doi.org/10.6084/m9.figshare.27208173).
 
