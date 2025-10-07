@@ -25,7 +25,7 @@ The ouput files are sc2Assign and WAffinity prediicted cell type for each single
 
 # Usage
 ```
-pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, percentile = 0.25, reduction = 'umap')
+pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, percentile = 0.25, reduction = 'tsne')
 ```
 
 *in which*
@@ -36,11 +36,11 @@ pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, perce
 
 - **marker.genes:** A list where each element is a vector of marker genes associated with specific cell types. Each entry in the list corresponds to a particular cell type, and the marker genes are used to identify and assign cells to their respective types based on their expression profiles.
 
-- **scData:** A Seurat object that contains cell metadata, including expression data and dimensionality reduction results (e.g., UMAP or PCA). This object is used for storing additional information such as cell-type predictions and performing tasks like cell reassignment based on WAffinity and sc2Assign scores.
+- **scData:** A Seurat object that contains cell metadata, including expression data and dimensionality reduction results (e.g., tSNE, UMAP or PCA). This object is used for storing additional information such as cell-type predictions and performing tasks like cell reassignment based on WAffinity and sc2Assign scores.
 
 - **percentile (default = 0.25):** A numeric value between 0 and 1 that specifies the threshold for identifying uncertain cell assignments. Cells with WAffinity scores that fall below this percentile are considered less confident and are subject to reassignment using the sc2Assign method. The default value of 0.25 means that the lowest 25% of cells (in terms of confidence) will be considered for reassignment.
 
-- **reduction (default = 'umap'):**  A string specifying the dimensionality reduction method to use when reassigning uncertain cells. Options can include 'umap', 'pca', or other methods available in the Seurat object.
+- **reduction (default = 'tsne'):**  A string specifying the dimensionality reduction method to use when reassigning uncertain cells. Options can include 'tsne', 'umap', 'pca', or other methods available in the Seurat object.
 
 # Tutorial
 A comprehensive tutorial explaining how to use the **sc2Assign** function for cell type assignment is provided in the **Tutorial** directory of this package. The tutorial includes detailed instructions, example code, and step-by-step guidance to help you understand and apply the **sc2Assign** method to your own datasets.
