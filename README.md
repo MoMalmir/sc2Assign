@@ -13,7 +13,7 @@ library(devtools)
 ```
 Next you can use the command below to install sc2Assign: 
 ```
-devtools::install_github("msmalmir/sc2Assign")
+devtools::install_github("momalmir/sc2Assign")
 library(sc2Assign)
 ```
 
