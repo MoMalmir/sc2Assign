@@ -95,12 +95,12 @@ SC_WAffinity <- function(count.matrix, norm.matrix, marker.genes) {
 #' @param WAffinity_tabel A matrix of WAffinity scores for all cells.
 #' @param scData A Seurat object containing cell data and dimensionality reduction results.
 #' @param percentile The percentile threshold used for identifying uncertain cell assignments.
-#' @param reduction A string specifying the dimensionality reduction method (e.g., 'umap', 'pca').
+#' @param reduction A string specifying the dimensionality reduction method (e.g., 'tsne', 'pca').
 #'
 #' @return A list containing the misclassified cells and their reassigned cell types.
 #' @export
 #' @name sc2Assign
-SC_sc2Assign <- function(WAffinity_tabel, scData, percentile, reduction = 'umap') {
+SC_sc2Assign <- function(WAffinity_tabel, scData, percentile, reduction = 'tsne') {
   get_max_diff_and_rows <- function(column) {
     sorted_indices <- order(column, decreasing = TRUE)
     if (length(sorted_indices) < 2) return(c(NA, NA, NA))
@@ -173,7 +173,7 @@ SC_sc2Assign <- function(WAffinity_tabel, scData, percentile, reduction = 'umap'
 #' @param marker.genes A list where each element is a vector of marker genes corresponding to a particular cell type.
 #' @param scData A Seurat object containing cell metadata and dimensional reduction results.
 #' @param percentile A numeric value specifying the threshold percentile for sc2Assign (default is 0.25).
-#' @param reduction A string indicating the dimensionality reduction method to use (default is 'umap').
+#' @param reduction A string indicating the dimensionality reduction method to use (default is 'tsne').
 #'
 #' @return A list containing:
 #' \describe{
@@ -183,7 +183,7 @@ SC_sc2Assign <- function(WAffinity_tabel, scData, percentile, reduction = 'umap'
 #' @export
 #'
 #' @name sc2Assign
-sc2Assign <- function(count.matrix, norm.matrix, marker.genes, scData, percentile = 0.25, reduction = 'umap') {
+sc2Assign <- function(count.matrix, norm.matrix, marker.genes, scData, percentile = 0.25, reduction = 'tsne') {
 
   # Ensure all marker genes are included in the count matrix
   geneNames <- rownames(count.matrix)
