@@ -45,7 +45,7 @@ pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, perce
 # Tutorial
 A comprehensive tutorial explaining how to use the **sc2Assign** function for cell type assignment is provided in the **Tutorial** directory of this package. The tutorial includes detailed instructions, example code, and step-by-step guidance to help you understand and apply the **sc2Assign** method to your own datasets.
 
-To access the tutorial, navigate to the **Tutorial** folder in the package directory, or click [here](https://doi.org/10.6084/m9.figshare.27208077) to view the tutorial files.
+To access the tutorial, navigate to the **Tutorial** folder in the package directory, or click [here](https://figshare.com/account/articles/27208077?file=58550638) to view the tutorial files.
 
 # Authors
 - **Mostafa Malmir** - malmir.edumail@gmail.com
