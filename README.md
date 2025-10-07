@@ -1,7 +1,7 @@
 # sc2Assign v0.1.0
 **sc2Assign** is a novel algorithm designed for robust and accurate cell type assignment in single-cell RNA sequencing (scRNA-seq) data. By leveraging weighted affinity scores, sc2Assign enhances the identification of known and rare cell types in heterogeneous scRNA-seq datasets. This approach integrates non-marker gene expression data to refine cell type assignment, overcoming the limitations of traditional clustering and marker-gene-based methods.
 
-![](Images/sc2Assign_blockdiagram)
+![](Images/sc2Assign_blockdiagram.png)
 
 This is the official Github repository of the sc2Assign package presented in the Article 
 
