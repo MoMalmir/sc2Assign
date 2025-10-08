@@ -13,8 +13,8 @@ NULL  # This is necessary to document package-level imports
 #'
 #' This function calculates the WAffinity score for each cell based on marker gene expression.
 #'
-#' @param count.matrix A matrix of gene expression counts (rows = genes, columns = cells).
-#' @param count.matrix.markers A matrix of gene expression counts for marker genes.
+#' @param count.matrix A sparse matrix of gene expression counts (rows = genes, columns = cells).
+#' @param count.matrix.markers A sparse matrix of gene expression counts for marker genes.
 #' @param weight A numeric vector representing weights for each marker gene.
 #'
 #' @return A numeric vector of WAffinity scores for each cell.
@@ -23,9 +23,13 @@ NULL  # This is necessary to document package-level imports
 WAffinity_Score <- function(count.matrix, count.matrix.markers, weight) {
   weight <- unname(weight)
   numGenes <- nrow(count.matrix.markers)
+  if (numGenes == 0) {
+    stop("WAffinity_Score: No genes found in count.matrix.markers.")
+  }
+  
   count.matrix.genes.weighted <- count.matrix.markers * weight
-  wa_score <- colSums(count.matrix.genes.weighted)
-  cpmi <- colSums(count.matrix)
+  wa_score <- Matrix::colSums(count.matrix.genes.weighted)
+  cpmi <- Matrix::colSums(count.matrix)
   wa_score <- log10((wa_score * 1e6) / (cpmi * numGenes) + 1)
   return(wa_score)
 }
@@ -34,16 +38,30 @@ WAffinity_Score <- function(count.matrix, count.matrix.markers, weight) {
 #'
 #' This function calculates the WAffinity weights using the Pearson correlation coefficient between marker genes.
 #'
-#' @param norm.matrix.markers A normalized matrix of marker genes' expression data.
+#' @param norm.matrix.markers A normalized sparse matrix of marker genes' expression data.
 #' @param gene.markers A vector of marker genes.
 #'
 #' @return A numeric vector of gene scores (weights) for the marker genes.
 #' @export
 #' @name WAffinity_Weight
 WAffinity_Weight <- function(norm.matrix.markers, gene.markers) {
+  if (nrow(norm.matrix.markers) == 0) {
+    stop("WAffinity_Weight: norm.matrix.markers is empty (no matching genes).")
+  }
+  if (nrow(norm.matrix.markers) == 1) {
+    return(1)
+  }
+  
+  
+  # convert sparse to dense for correlation if needed
+  if (inherits(norm.matrix.markers, "dgCMatrix")) {
+    norm.matrix.markers <- as.matrix(norm.matrix.markers)
+  }
+  
   correlation_matrix <- cor(t(norm.matrix.markers))
   diag(correlation_matrix) <- 1
-  gene_scores <- rowSums(correlation_matrix, na.rm = TRUE) / max(rowSums(correlation_matrix, na.rm = TRUE))
+  gene_scores <- rowSums(correlation_matrix, na.rm = TRUE) /
+    max(rowSums(correlation_matrix, na.rm = TRUE))
   gene_scores[gene_scores < 0] <- 0
   return(gene_scores)
 }
@@ -52,8 +70,8 @@ WAffinity_Weight <- function(norm.matrix.markers, gene.markers) {
 #'
 #' This function computes the WAffinity scores for all cell types based on marker gene expression and weighted scores.
 #'
-#' @param count.matrix A matrix containing gene expression counts (rows = genes, columns = cells).
-#' @param norm.matrix A matrix of normalized gene expression values for the same genes and cells.
+#' @param count.matrix A sparse matrix containing gene expression counts (rows = genes, columns = cells).
+#' @param norm.matrix A sparse matrix of normalized gene expression values for the same genes and cells.
 #' @param marker.genes A list of marker genes for each cell type.
 #'
 #' @return A list containing WAffinity score table, predictions, and the gene weights used for each cell type.
@@ -63,30 +81,38 @@ SC_WAffinity <- function(count.matrix, norm.matrix, marker.genes) {
   wa_score_table <- matrix(nrow = length(marker.genes), ncol = ncol(count.matrix))
   colnames(wa_score_table) <- colnames(count.matrix)
   rownames(wa_score_table) <- names(marker.genes)
-
+  
   weight_list <- vector("list", length(marker.genes))
   names(weight_list) <- names(marker.genes)
-
+  
   for (i in seq_along(marker.genes)) {
     gene.markers <- marker.genes[[i]]
+    gene.markers <- gene.markers[gene.markers %in% rownames(count.matrix)]
+    
+    
+    if (length(gene.markers) == 0) {
+      next
+    }
+    
     count.matrix.markers <- count.matrix[gene.markers, , drop = FALSE]
     norm.matrix.markers <- norm.matrix[gene.markers, , drop = FALSE]
-
+    
     if (length(gene.markers) <= 1) {
       weight <- 1
     } else {
       weight <- WAffinity_Weight(norm.matrix.markers, gene.markers)
     }
-
+    
     weight_list[[i]] <- weight
     wa_score_table[i, ] <- WAffinity_Score(count.matrix, count.matrix.markers, weight)
   }
-
+  
   WAffinity_predict <- rownames(wa_score_table)[apply(wa_score_table, 2, which.max)]
   WAffinity_predict <- ifelse(apply(wa_score_table, 2, max) > 0, WAffinity_predict, "unknown")
-
+  
   return(list(score = wa_score_table, predict = WAffinity_predict, weight = weight_list))
 }
+
 
 #' SC_sc2Assign Function
 #'
@@ -168,8 +194,8 @@ SC_sc2Assign <- function(WAffinity_tabel, scData, percentile, reduction = 'tsne'
 #'
 #' This function performs cell type assignment using WAffinity and sc2Assign methods.
 #'
-#' @param count.matrix A matrix containing gene expression counts where rows represent genes and columns represent cells.
-#' @param norm.matrix A matrix containing normalized gene expression data for the same genes and cells.
+#' @param count.matrix A sparse matrix containing gene expression counts where rows represent genes and columns represent cells.
+#' @param norm.matrix A sparse matrix containing normalized gene expression data for the same genes and cells.
 #' @param marker.genes A list where each element is a vector of marker genes corresponding to a particular cell type.
 #' @param scData A Seurat object containing cell metadata and dimensional reduction results.
 #' @param percentile A numeric value specifying the threshold percentile for sc2Assign (default is 0.25).
