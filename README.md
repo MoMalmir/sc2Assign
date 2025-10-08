@@ -18,7 +18,7 @@ library(sc2Assign)
 ```
 
 # Data input
-You need to provide the algorithm with count matrix, nomalized matrix and the gene marker set
+You need to provide the algorithm with sparse count matrix, sparse nomalized matrix and the gene marker set
 
 # Output files
 The ouput files are sc2Assign and WAffinity prediicted cell type for each single cell
@@ -30,9 +30,9 @@ pred_results <- sc2Assign(count.matrix, norm.matrix, marker.genes, scData, perce
 
 *in which*
 
-- **count.matrix:** A matrix containing raw gene expression counts. The rows represent genes, and the columns represent individual cells.
+- **count.matrix:** A sparse matrix containing raw gene expression counts. The rows represent genes, and the columns represent individual cells.
 
-- **norm.matrix:**  A matrix of normalized gene expression values, with the same dimensions as the count.matrix.
+- **norm.matrix:**  A sparse matrix of normalized gene expression values, with the same dimensions as the count.matrix.
 
 - **marker.genes:** A list where each element is a vector of marker genes associated with specific cell types. Each entry in the list corresponds to a particular cell type, and the marker genes are used to identify and assign cells to their respective types based on their expression profiles.
 
